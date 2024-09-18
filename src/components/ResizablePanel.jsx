@@ -1,9 +1,61 @@
 import React, { useState, useRef, useEffect } from "react";
+import CodeEditorWindow from "./CodeEditorWindow";
 
 const ResizablePanel = () => {
   const [leftWidth, setLeftWidth] = useState(50);
   const resizerRef = useRef(null);
   const isResizing = useRef(false);
+
+  const [code, setCode] = useState(javascriptDefault);
+  const [customInput, setCustomInput] = useState("");
+  const [outputDetails, setOutputDetails] = useState(null);
+  const [processing, setProcessing] = useState(null);
+  const [theme, setTheme] = useState("cobalt");
+  const [language, setLanguage] = useState(languageOptions[0]);
+
+  const enterPress = useKeyPress("Enter");
+  const ctrlPress = useKeyPress("Control");
+
+  const onSelectChange = (sl) => {
+    console.log("selected Option...", sl);
+    setLanguage(sl);
+  };
+
+  useEffect(() => {
+    if (enterPress && ctrlPress) {
+      console.log("enterPress", enterPress);
+      console.log("ctrlPress", ctrlPress);
+      handleCompile();
+    }
+  }, [ctrlPress, enterPress]);
+  const onChange = (action, data) => {
+    switch (action) {
+      case "code": {
+        setCode(data);
+        break;
+      }
+      default: {
+        console.warn("case not handled!", action, data);
+      }
+    }
+  };
+  const handleCompile = () => {
+    // We will come to the implementation later in the code
+  };
+
+  const checkStatus = async (token) => {
+    // We will come to the implementation later in the code
+  };
+
+  function handleThemeChange(th) {
+    // We will come to the implementation later in the code
+  }
+  useEffect(() => {
+    defineTheme("oceanic-next").then((_) =>
+      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
+    );
+  }, []);
+
 
   const handleMouseDown = () => {
     isResizing.current = true;
@@ -35,11 +87,17 @@ const ResizablePanel = () => {
   return (
     <div className="flex h-screen">
       {/* Left Panel */}
+      
       <div
-        className="bg-blue-500 h-full text-white flex items-center justify-center bg-gray-600"
+        className="h-full text-white flex items-center justify-center bg-gray-600"
         style={{ width: `${leftWidth}%`, minWidth: "20%", maxWidth: "80%" }}
       >
-        Left Panel
+        <CodeEditorWindow
+            code={code}
+            onChange={onChange}
+            language={language?.value}
+            theme={theme.value}
+        />
       </div>
 
       {/* Resizer */}
