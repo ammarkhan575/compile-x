@@ -7,9 +7,9 @@ import useKeyPress from "../hooks/useKeyPress";
 import { javascriptDefault } from "../constants/defaultCode";
 import { languageOptions } from "../constants/languageOptions";
 import { defineTheme } from "../lib/defineTheme";
-import OutputWindow from "./OutputWindow";
-import CustomInput from "./CustomInput";
-import OutputDetails from "./OutputDetails";
+import RightPanel from "./RightPanel";
+import LeftPanel from "./LeftPanel";
+import Resizer from "./Resizer";
 
 const ResizablePanel = () => {
   const [leftWidth, setLeftWidth] = useState(50);
@@ -24,10 +24,12 @@ const ResizablePanel = () => {
   const [outputDetails, setOutputDetails] = useState(null);
   const [processing, setProcessing] = useState(null);
   const [theme, setTheme] = useState({
-    value: "oceanic-next",
-    label: "Oceanic Next"
+    value: "blackboard",
+    label: "Blackboard"
   });
   const [language, setLanguage] = useState(languageOptions[0]);
+
+  const [isThemeLoading, setIsThemeLoading] = useState(true);
 
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
@@ -59,17 +61,24 @@ const ResizablePanel = () => {
   };
 
   const handleThemeChange = (th) => {
+    setIsThemeLoading(true);
     if (["light", "vs-dark"].includes(th.value)) {
       setTheme(th);
+      setIsThemeLoading(false);
     } else {
-      defineTheme(th.value).then(() => setTheme(th));
+      defineTheme(th.value).then(() => {
+        setTheme(th);
+        setIsThemeLoading(false);
+      });
     }
   };
 
   useEffect(() => {
-    defineTheme("oceanic-next").then(() =>
-      setTheme({ value: "oceanic-next", label: "Oceanic Next" })
-    );
+    setIsThemeLoading(true);
+    defineTheme("blackboard").then(() => {
+      setTheme({ value: "blackboard", label: "Blackboard" });
+      setIsThemeLoading(false);
+    });
   }, []);
 
   const handleMouseDown = (e, type) => {
@@ -121,62 +130,29 @@ const ResizablePanel = () => {
 
   return (
     <div className="flex h-full overflow-hidden">
-      {/* Left Panel */}
-      <div
-        className="h-inherit  text-white flex items-center justify-center bg-panel overflow-scroll"
-        style={{ width: `${leftWidth}%`, minWidth: "20%", maxWidth: "80%" }}
-      >
-        <div className="flex flex-col w-full h-full">
-          <div className="flex w-full m-4 gap-4">
-            <LanguagesDropdown onSelectChange={onSelectChange} />
-            <ThemeDropdown
-              handleThemeChange={handleThemeChange}
-              theme={theme}
-            />
-          </div>
-          <CodeEditorWindow
-            code={code}
-            onChange={onChange}
-            language={language?.value}
-            theme={theme.value}
-          />
-        </div>
-      </div>
+      <LeftPanel
+        leftWidth={leftWidth}
+        onSelectChange={onSelectChange}
+        handleThemeChange={handleThemeChange}
+        code={code}
+        onChange={onChange}
+        language={language}
+        theme={theme}
+        isThemeLoading={isThemeLoading}
+      />
 
       {/* Horizontal Resizer */}
-      <div
-        className="w-1 px-0.5 h-full bg-panelbody hover:bg-gray-300 active:bg-gray-300 cursor-ew-resize rounded-md"
-        ref={resizerRef}
-        onMouseDown={(e) => handleMouseDown(e, "horizontal")}
-      ></div>
+      <Resizer type="horizontal" onMouseDown={handleMouseDown} />
 
       {/* Right Panel */}
-      <div className=" op h-full flex-1 flex flex-col">
-        <div
-          className="bg-panel p-4 h-full overflow-y-scroll"
-          style={{
-            height: `${topHeight}%`,
-            minHeight: "30%",
-            maxHeight: "70%"
-          }}
-        >
-          <OutputWindow outputDetails={outputDetails} />
-        </div>
-
-        {/* Vertical Resizer */}
-        <div
-          className="h-1 py-0.5 w-full bg-panelbody hover:bg-gray-300 active:bg-gray-300 cursor-ns-resize  rounded-md "
-          ref={verticalResizerRef}
-          onMouseDown={(e) => handleMouseDown(e, "vertical")}
-        ></div>
-
-        <div className="p-4 flex-1 bg-panel overflow-scroll">
-          <CustomInput
-            customInput={customInput}
-            setCustomInput={setCustomInput}
-          />
-        </div>
-      </div>
+      <RightPanel
+        topHeight={topHeight}
+        outputDetails={outputDetails}
+        verticalResizerRef={verticalResizerRef}
+        handleMouseDown={handleMouseDown}
+        customInput={customInput}
+        setCustomInput={setCustomInput}
+      />
     </div>
   );
 };
