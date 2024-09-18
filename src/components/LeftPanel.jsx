@@ -6,7 +6,7 @@ import CodeEditorWindow from "./CodeEditorWindow";
 const LeftPanel = ({leftWidth, onSelectChange, handleThemeChange, code, onChange, language, theme, isThemeLoading}) => {
   return (
     <div
-      className="h-inherit  text-white flex items-center justify-center bg-panel overflow-scroll"
+      className="h-inherit text-white flex items-center justify-center bg-panel overflow-scroll"
       style={{ width: `${leftWidth}%`, minWidth: "20%", maxWidth: "80%" }}
     >
       <div className="flex flex-col w-full h-full">
@@ -15,7 +15,7 @@ const LeftPanel = ({leftWidth, onSelectChange, handleThemeChange, code, onChange
           <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
         </div>
         {isThemeLoading ? (
-          <div>Loading theme...</div>
+          <div className="h-full w-full flex justify-center items-center"></div>
         ) : (
           <div>
             <CodeEditorWindow
