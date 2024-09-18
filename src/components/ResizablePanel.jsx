@@ -13,7 +13,7 @@ import OutputDetails from "./OutputDetails";
 
 const ResizablePanel = () => {
   const [leftWidth, setLeftWidth] = useState(50);
-  const [topHeight, setTopHeight] = useState(50);
+  const [topHeight, setTopHeight] = useState(60);
   const resizerRef = useRef(null);
   const verticalResizerRef = useRef(null);
   const isResizing = useRef(false);
@@ -120,7 +120,7 @@ const ResizablePanel = () => {
   }, []);
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full overflow-hidden">
       {/* Left Panel */}
       <div
         className="h-inherit  text-white flex items-center justify-center bg-panel overflow-scroll"
