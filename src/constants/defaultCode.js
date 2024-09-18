@@ -1,0 +1,1 @@
+export const javascriptDefault =   `console.log('Hello World!')`;
