@@ -1,8 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import CodeEditorWindow from "./CodeEditorWindow";
-import LanguagesDropdown from "./LanguageDropdown";
-import ThemeDropdown from "./ThemeDropdown";
-
+import axios from "axios";
+import { toast } from "react-toastify";
 import useKeyPress from "../hooks/useKeyPress";
 import { javascriptDefault } from "../constants/defaultCode";
 import { languageOptions } from "../constants/languageOptions";
@@ -10,6 +8,8 @@ import { defineTheme } from "../lib/defineTheme";
 import RightPanel from "./RightPanel";
 import LeftPanel from "./LeftPanel";
 import Resizer from "./Resizer";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ResizablePanel = () => {
   const [leftWidth, setLeftWidth] = useState(50);
@@ -52,12 +52,95 @@ const ResizablePanel = () => {
     }
   };
 
+  const showSuccessToast = (msg) => {
+    toast.success(msg || `Compiled Successfully!`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  const showErrorToast = (msg) => {
+    toast.error(msg || `Something went wrong! Please try again.`, {
+      position: "top-right",
+      autoClose: 1000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
   const handleCompile = () => {
-    // We will come to the implementation later in the code
+    setProcessing(true);
+    const formData = {
+      language_id: language.id,
+      source_code: btoa(code),
+      stdin: btoa(customInput)
+    };
+    const options = {
+      method: "POST",
+      url: process.env.REACT_APP_RAPID_API_URL,
+      params: { base64_encoded: "true", fields: "*" },
+      headers: {
+        "content-type": "application/json",
+        "Content-Type": "application/json",
+        "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
+        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY
+      },
+      data: formData
+    };
+
+    axios
+      .request(options)
+      .then(function (response) {
+        console.log("res.data", response.data);
+        const token = response.data.token;
+        checkStatus(token);
+      })
+      .catch((err) => {
+        let error = err.response ? err.response.data : err;
+        setProcessing(false);
+        console.log(error);
+      });
   };
 
   const checkStatus = async (token) => {
-    // We will come to the implementation later in the code
+    const options = {
+      method: "GET",
+      url: process.env.REACT_APP_RAPID_API_URL + "/" + token,
+      params: { base64_encoded: "true", fields: "*" },
+      headers: {
+        "X-RapidAPI-Host": process.env.REACT_APP_RAPID_API_HOST,
+        "X-RapidAPI-Key": process.env.REACT_APP_RAPID_API_KEY
+      }
+    };
+    try {
+      let response = await axios.request(options);
+      let statusId = response.data.status?.id;
+
+      if (statusId === 1 || statusId === 2) {
+        setTimeout(() => {
+          checkStatus(token);
+        }, 2000);
+        return;
+      } else {
+        setProcessing(false);
+        setOutputDetails(response.data);
+        showSuccessToast(`Compiled Successfully!`);
+        console.log("response.data", response.data);
+        return;
+      }
+    } catch (err) {
+      console.log("err", err);
+      setProcessing(false);
+      showErrorToast();
+    }
   };
 
   const handleThemeChange = (th) => {
@@ -129,31 +212,42 @@ const ResizablePanel = () => {
   }, []);
 
   return (
-    <div className="flex h-full overflow-hidden">
-      <LeftPanel
-        leftWidth={leftWidth}
-        onSelectChange={onSelectChange}
-        handleThemeChange={handleThemeChange}
-        code={code}
-        onChange={onChange}
-        language={language}
-        theme={theme}
-        isThemeLoading={isThemeLoading}
+    <>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
+      <div className="flex h-full overflow-hidden">
+        <LeftPanel
+          leftWidth={leftWidth}
+          onSelectChange={onSelectChange}
+          handleThemeChange={handleThemeChange}
+          code={code}
+          onChange={onChange}
+          language={language}
+          theme={theme}
+          isThemeLoading={isThemeLoading}
+        />
 
-      {/* Horizontal Resizer */}
-      <Resizer type="horizontal" onMouseDown={handleMouseDown} />
+        <Resizer type="horizontal" onMouseDown={handleMouseDown} />
 
-      {/* Right Panel */}
-      <RightPanel
-        topHeight={topHeight}
-        outputDetails={outputDetails}
-        verticalResizerRef={verticalResizerRef}
-        handleMouseDown={handleMouseDown}
-        customInput={customInput}
-        setCustomInput={setCustomInput}
-      />
-    </div>
+        <RightPanel
+          topHeight={topHeight}
+          outputDetails={outputDetails}
+          verticalResizerRef={verticalResizerRef}
+          handleMouseDown={handleMouseDown}
+          customInput={customInput}
+          setCustomInput={setCustomInput}
+        />
+      </div>
+    </>
   );
 };
 
