@@ -1,5 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import CodeEditorWindow from "./CodeEditorWindow";
+import LanguagesDropdown from "./LanguageDropdown";
+import ThemeDropdown from "./ThemeDropdown";
+
+import useKeyPress from "../hooks/useKeyPress";
+import { javascriptDefault } from "../constants/defaultCode";
+import { languageOptions } from "../constants/languageOptions";
+import { defineTheme } from "../lib/defineTheme";
 
 const ResizablePanel = () => {
   const [leftWidth, setLeftWidth] = useState(50);
@@ -56,6 +63,16 @@ const ResizablePanel = () => {
     );
   }, []);
 
+  function handleThemeChange(th) {
+    const theme = th;
+    console.log("theme...", theme);
+
+    if (["light", "vs-dark"].includes(theme.value)) {
+      setTheme(theme);
+    } else {
+      defineTheme(theme.value).then((_) => setTheme(theme));
+    }
+  }
 
   const handleMouseDown = () => {
     isResizing.current = true;
@@ -87,17 +104,27 @@ const ResizablePanel = () => {
   return (
     <div className="flex h-screen">
       {/* Left Panel */}
-      
       <div
         className="h-full text-white flex items-center justify-center bg-gray-600"
         style={{ width: `${leftWidth}%`, minWidth: "20%", maxWidth: "80%" }}
       >
-        <CodeEditorWindow
-            code={code}
-            onChange={onChange}
-            language={language?.value}
-            theme={theme.value}
-        />
+        <div className="flex flex-col w-full h-full">
+            <div className="flex w-full m-4 gap-4">
+                <LanguagesDropdown 
+                    onSelectChange={onSelectChange}
+                />
+                <ThemeDropdown
+                    handleThemeChange={handleThemeChange}
+                    theme={theme}
+                />
+            </div>
+            <CodeEditorWindow
+                code={code}
+                onChange={onChange}
+                language={language?.value}
+                theme={theme.value}
+            />
+        </div>
       </div>
 
       {/* Resizer */}
