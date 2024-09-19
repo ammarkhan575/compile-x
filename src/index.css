@@ -2,6 +2,25 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px; /* Thinner scrollbar */
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #888; /* Color of the scrollbar thumb */
+  border-radius: 10px; /* Rounded corners for a smooth look */
+  border: 2px solid #f1f1f1; /* Adjust border to match the thinner scrollbar */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #555; /* Change color on hover */
+}
+
 body {
   @apply bg-panel;
 }
