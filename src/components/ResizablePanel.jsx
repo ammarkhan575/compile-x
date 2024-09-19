@@ -237,7 +237,6 @@ const ResizablePanel = () => {
         />
 
         <Resizer type="horizontal" onMouseDown={handleMouseDown} />
-
         <RightPanel
           topHeight={topHeight}
           outputDetails={outputDetails}
@@ -245,6 +244,8 @@ const ResizablePanel = () => {
           handleMouseDown={handleMouseDown}
           customInput={customInput}
           setCustomInput={setCustomInput}
+          handleCompile={handleCompile}
+          processing={processing}
         />
       </div>
     </>
