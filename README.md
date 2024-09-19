@@ -43,11 +43,10 @@ To set up the project locally:
 4. Set up your environment variables:
    - Create a `.env` file in the root directory.
    - Add your Judge0 API key:
-     ```
-    REACT_APP_RAPID_API_HOST = 
-    REACT_APP_RAPID_API_KEY = 
-    REACT_APP_RAPID_API_URL = s
-     ```
+    - REACT_APP_RAPID_API_HOST = 
+    - REACT_APP_RAPID_API_KEY = 
+    - REACT_APP_RAPID_API_URL = 
+
 
 5. Start the development server:
    ```
