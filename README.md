@@ -1,70 +1,96 @@
-# Getting Started with Create React App
+# Compile-X
+Compile-X is a code editor and compiler built with React, Monaco Editor, and TailwindCSS. It allows users to write, edit, and compile code in multiple programming languages using the Judge0 API. The platform provides a seamless coding experience with language and theme selection options, live output, and customizable settings.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Features
 
-## Available Scripts
+- **Monaco Editor** for writing and editing code with syntax highlighting.
+- **Compile code** in multiple programming languages via the Judge0 API.
+- **Language and Theme Selection** using React Select.
+- **Live Output** window to display compilation results.
+- **Resizable Panels** for code editor and output sections.
+- **Error Handling and Notifications** using React Toastify.
 
-In the project directory, you can run:
+## Technologies Used
 
-### `npm start`
+- **React** - Front-end framework.
+- **Monaco Editor** - Code editor with syntax highlighting.
+- **TailwindCSS** - Utility-first CSS framework for responsive design.
+- **React Toastify** - For in-app notifications.
+- **React Select** - For language and theme dropdowns.
+- **Axios** - For making API requests to Judge0 API.
+- **Judge0 API** - Code compilation and execution engine.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation
 
-### `npm test`
+To set up the project locally:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository:
+   ```
+   git clone https://github.com/ammarkhan575/compile-x.git
+   ```
 
-### `npm run build`
+2. Navigate to the project directory:
+   ```
+   cd compile-x
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Install dependencies:
+   ```
+   npm install
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Set up your environment variables:
+   - Create a `.env` file in the root directory.
+   - Add your Judge0 API key:
+     ```
+    REACT_APP_RAPID_API_HOST = 
+    REACT_APP_RAPID_API_KEY = 
+    REACT_APP_RAPID_API_URL = s
+     ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+5. Start the development server:
+   ```
+   npm start
+   ```
 
-### `npm run eject`
+The app should now be running on [http://localhost:3000](http://localhost:3000).
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. **Select Language:** Choose your preferred programming language from the dropdown menu.
+2. **Write Code:** Use the Monaco editor to write or paste code.
+3. **Compile:** Click the "Run" button to compile the code and see the output in the results panel.
+4. **Theme Switching:** Toggle between mulitple themes monaco editor.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Screenshots
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/f6ff77fa-8366-4339-a8b8-0a99711deea0">
 
-## Learn More
+## Future Enhancements
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Add support for more languages.
+- Improve error handling and show real-time status updates during API requests.
+- Implement user authentication for saving code snippets.
+- Add a "Share Code" feature to easily share snippets with others.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contributing
 
-### Code Splitting
+Contributions are welcome! To contribute:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+1. Fork the repository.
+2. Create a new branch (\`git checkout -b feature-branch\`).
+3. Make your changes.
+4. Commit your changes (\`git commit -m 'Add feature'\`).
+5. Push to the branch (\`git push origin feature-branch\`).
+6. Open a pull request.
 
-### Analyzing the Bundle Size
+## License
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-### Making a Progressive Web App
+## Acknowledgements
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- [Judge0 API](https://judge0.com/) for code compilation services.
+- [Monaco Editor](https://microsoft.github.io/monaco-editor/) for the robust code editor.
+- [React Toastify](https://fkhadra.github.io/react-toastify/) for notifications.
